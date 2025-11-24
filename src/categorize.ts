@@ -12,16 +12,21 @@ export async function categorizeNote(noteContent: string): Promise<string> {
   const prompt = `You are analyzing personal notes from an Obsidian vault.
 
 Available categories:
-- CAREER (job search, professional development, work)
-- HEALTH (fitness, mental health, wellness)
-- JOURNAL (daily reflections, personal thoughts)
-- BUSINESS (ventures, ideas, entrepreneurship)
-- FINANCES (budget, investments, money)
-- KNOWLEDGE (learning, books, courses)
-- PROJECTS (active projects, portfolio)
-- VISION (goals, life planning, future)
+ARCHIVE - Old notes, 2017-2023 Notion archive, past years
+BUSINESS & VENTURES - Business ideas, active ventures, development funnel
+CAREER - Job search, professional development, work history
+EVIDENCE -  Accountability system (Daily Builds, Weekly Shipped, etc.)
+FINANCES - Budget, money management
+HEALTH & FITNESS - Physical health, gym, wellness
+JOURNAL - Daily notes, reflections, personal thoughts
+KNOWLEDGE BASE - Books, technical learning, writing, essays, philosophy
+PERSONAL LIFE - Hobbies, travel, personal matters
+PROJECTS - Active projects, portfolio, in development
+REFERENCE - Important documents, tasks archive
+SYSTEMS & HABITS - Life rules, routines
+VISION & PLANNING - Annual goals, life vision, multi-year plans
 
-Based on this note, return ONLY the category name (one word):
+ONLY the category name (one word):
 
 ${noteContent}`;
 
