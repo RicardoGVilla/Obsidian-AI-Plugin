@@ -83,7 +83,7 @@ Write the summary in a narrative style, as if explaining to the note author what
 Summary (200 words):`;
 
   // Generate summary with Gemini
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
   const result = await model.generateContent(prompt);
   const summary = result.response.text().trim();
   
