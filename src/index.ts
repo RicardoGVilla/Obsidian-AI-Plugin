@@ -5,6 +5,7 @@ import * as readline from 'readline';
 import { categorizeNote } from './categorize';
 import { summarizeFolder } from './summarize';
 import { analyzePattern } from './analyze';
+import { answerQuestion } from './qa';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -30,11 +31,12 @@ async function main() {
   console.log('  1. 📄 Categorize a note');
   console.log('  2. 📁 Summarize a folder');
   console.log('  3. 🔍 Analyze keyword patterns');
-  console.log('  4. ❌ Exit\n');
+  console.log('  4. 💬 Ask a question about your vault');
+  console.log('  5. ❌ Exit\n');
 
-  const choice = await question('Enter your choice (1-4): ');
+  const choice = await question('Enter your choice (1-5): ');
 
-  if (choice === '4') {
+  if (choice === '5') {
     console.log('\n👋 Goodbye!\n');
     rl.close();
     process.exit(0);
@@ -55,8 +57,12 @@ async function main() {
         await handleAnalyze();
         break;
 
+      case '4':
+        await handleQA();
+        break;
+
       default:
-        console.log('\n❌ Invalid choice. Please enter 1, 2, 3, or 4.\n');
+        console.log('\n❌ Invalid choice. Please enter 1, 2, 3, 4, or 5.\n');
         await main();
         return;
     }
@@ -193,6 +199,49 @@ async function handleAnalyze() {
     console.log(`\n✨ AI Insights:`);
     console.log(`   ${result.aiInsights}\n`);
   }
+}
+
+async function handleQA() {
+  console.log('\n💬 Ask a question about your vault\n');
+  
+  const defaultPath = DEFAULT_VAULT;
+  console.log(`Default vault path: ${defaultPath}`);
+  
+  let vaultPath = await question('Enter vault path (or press Enter for default): ');
+  vaultPath = vaultPath.trim() || defaultPath;
+
+  // Validate vault path
+  if (!fs.existsSync(vaultPath)) {
+    console.log('❌ Vault path not found. Please try again.');
+    return await handleQA();
+  }
+
+  if (!fs.statSync(vaultPath).isDirectory()) {
+    console.log('❌ Must be a directory. Please try again.');
+    return await handleQA();
+  }
+
+  const question_text = await question('Enter your question: ');
+  
+  if (!question_text.trim()) {
+    console.log('❌ Please enter a question.');
+    return await handleQA();
+  }
+
+  console.log('\n⏳ Searching vault and analyzing...\n');
+
+  const result = await answerQuestion(question_text, vaultPath);
+
+  console.log('\n' + '='.repeat(80));
+  console.log(`❓ Question: ${result.question}`);
+  console.log('='.repeat(80));
+  console.log(`\n✨ Answer:\n${result.answer}\n`);
+  console.log('='.repeat(80));
+  console.log(`📊 Sources used: ${result.sourcesUsed} notes`);
+  if (result.contextSizeTokens) {
+    console.log(`📏 Context size: ~${result.contextSizeTokens} tokens`);
+  }
+  console.log('='.repeat(80) + '\n');
 }
 
 // Run main if executed directly
