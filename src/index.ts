@@ -6,6 +6,7 @@ import { categorizeNote } from './categorize';
 import { summarizeFolder } from './summarize';
 import { analyzePattern } from './analyze';
 import { answerQuestion } from './qa';
+import { generateVaultReport } from './batch';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -32,11 +33,12 @@ async function main() {
   console.log('  2. 📁 Summarize a folder');
   console.log('  3. 🔍 Analyze keyword patterns');
   console.log('  4. 💬 Ask a question about your vault');
-  console.log('  5. ❌ Exit\n');
+  console.log('  5. 📊 Generate vault report');
+  console.log('  6. ❌ Exit\n');
 
-  const choice = await question('Enter your choice (1-5): ');
+  const choice = await question('Enter your choice (1-6): ');
 
-  if (choice === '5') {
+  if (choice === '6') {
     console.log('\n👋 Goodbye!\n');
     rl.close();
     process.exit(0);
@@ -61,8 +63,12 @@ async function main() {
         await handleQA();
         break;
 
+      case '5':
+        await handleBatch();
+        break;
+
       default:
-        console.log('\n❌ Invalid choice. Please enter 1, 2, 3, 4, or 5.\n');
+        console.log('\n❌ Invalid choice. Please enter 1-6.\n');
         await main();
         return;
     }
@@ -243,6 +249,73 @@ async function handleQA() {
   }
   console.log('='.repeat(80) + '\n');
 }
+
+async function handleBatch() {
+  console.log('\n📊 Generate vault report\n');
+  
+  const defaultPath = DEFAULT_VAULT;
+  console.log(`Default vault path: ${defaultPath}`);
+  
+  let vaultPath = await question('Enter vault path (or press Enter for default): ');
+  vaultPath = vaultPath.trim() || defaultPath;
+
+  // Validate vault path
+  if (!fs.existsSync(vaultPath)) {
+    console.log('❌ Vault path not found. Please try again.');
+    return await handleBatch();
+  }
+
+  if (!fs.statSync(vaultPath).isDirectory()) {
+    console.log('❌ Must be a directory. Please try again.');
+    return await handleBatch();
+  }
+
+  console.log('\n⏳ Analyzing vault (this may take a moment)...\n');
+
+  const report = await generateVaultReport(vaultPath);
+
+  console.log('\n' + '='.repeat(80));
+  console.log('📊 VAULT ANALYSIS REPORT');
+  console.log('='.repeat(80));
+  
+  console.log('\n📈 STATISTICS:');
+  console.log(`   Total notes: ${report.totalNotes}`);
+  console.log(`   Total folders: ${report.totalFolders}`);
+  console.log(`\n   Notes by folder:`);
+  report.folderBreakdown
+    .sort((a, b) => b.noteCount - a.noteCount)
+    .forEach(folder => {
+      console.log(`      ${folder.name}: ${folder.noteCount} (${folder.percentage.toFixed(1)}%)`);
+    });
+
+  if (report.monthlyActivity.length > 0) {
+    console.log(`\n   Recent activity (last 6 months):`);
+    report.monthlyActivity
+      .slice(0, 6)
+      .forEach(activity => {
+        console.log(`      ${activity.month}: ${activity.noteCount} notes`);
+      });
+  }
+
+  console.log('\n📁 FOLDER SUMMARIES:');
+  Object.entries(report.folderSummaries).forEach(([folder, summary]) => {
+    console.log(`\n   ${folder}:`);
+    console.log(`      ${summary}`);
+  });
+
+  console.log('\n🔑 TOP THEMES:');
+  report.topThemes.forEach((theme, idx) => {
+    console.log(`   ${idx + 1}. ${theme}`);
+  });
+
+  console.log('\n💡 SUGGESTIONS:');
+  report.suggestions.forEach((suggestion, idx) => {
+    console.log(`   ${idx + 1}. ${suggestion}`);
+  });
+
+  console.log('\n' + '='.repeat(80) + '\n');
+}
+
 
 // Run main if executed directly
 if (require.main === module) {
