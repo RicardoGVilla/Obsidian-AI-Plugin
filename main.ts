@@ -1,0 +1,164 @@
+import { Plugin, WorkspaceLeaf, Notice, TFile, TFolder } from 'obsidian';
+import { categorizeNote } from './src/categorize';
+import { summarizeFolder } from './src/summarize';
+import { analyzePattern } from './src/analyze';
+import { answerQuestion } from './src/qa';
+import { generateVaultReport } from './src/batch';
+
+export default class AILifeAssistantPlugin extends Plugin {
+	async onload() {
+		console.log('Loading AI Life Assistant plugin');
+
+		// Command 1: Categorize Current Note
+		this.addCommand({
+			id: 'categorize-note',
+			name: 'Categorize Current Note',
+			callback: async () => {
+				const file = this.app.workspace.getActiveFile();
+				if (!file) {
+					new Notice('No active file');
+					return;
+				}
+
+				try {
+					new Notice('Categorizing note...');
+					const content = await this.app.vault.read(file);
+					const category = await categorizeNote(content);
+					new Notice(`Category: ${category}`);
+				} catch (error) {
+					new Notice(`Error: ${error.message}`);
+					console.error(error);
+				}
+			}
+		});
+
+		// Command 2: Summarize Current Folder
+		this.addCommand({
+			id: 'summarize-folder',
+			name: 'Summarize Current Folder',
+			callback: async () => {
+				const file = this.app.workspace.getActiveFile();
+				if (!file) {
+					new Notice('No active file');
+					return;
+				}
+
+				const folder = file.parent;
+				if (!folder) {
+					new Notice('File is not in a folder');
+					return;
+				}
+
+				try {
+					new Notice('Summarizing folder...');
+					const folderPath = (folder as TFolder).path;
+					const vaultPath = (this.app.vault.adapter as any).basePath;
+					const fullPath = `${vaultPath}/${folderPath}`;
+					
+					const summary = await summarizeFolder(fullPath);
+					new Notice(`Summary: ${summary.summary.substring(0, 100)}...`);
+					console.log('Full summary:', summary);
+				} catch (error) {
+					new Notice(`Error: ${error.message}`);
+					console.error(error);
+				}
+			}
+		});
+
+		// Command 3: Analyze Pattern in Vault
+		this.addCommand({
+			id: 'analyze-pattern',
+			name: 'Analyze Pattern in Vault',
+			callback: async () => {
+				const keyword = await this.promptForInput('Enter keyword to analyze:');
+				if (!keyword) return;
+
+				try {
+					new Notice(`Analyzing pattern: ${keyword}...`);
+					const vaultPath = (this.app.vault.adapter as any).basePath;
+					const analysis = await analyzePattern(vaultPath, keyword, true);
+					
+					new Notice(`Found ${analysis.totalMentions} mentions in ${analysis.filesWithKeyword} files`);
+					console.log('Full analysis:', analysis);
+				} catch (error) {
+					new Notice(`Error: ${error.message}`);
+					console.error(error);
+				}
+			}
+		});
+
+		// Command 4: Ask Question About Vault
+		this.addCommand({
+			id: 'ask-question',
+			name: 'Ask Question About Vault',
+			callback: async () => {
+				const question = await this.promptForInput('Ask a question about your vault:');
+				if (!question) return;
+
+				try {
+					new Notice('Searching vault for answer...');
+					const vaultPath = (this.app.vault.adapter as any).basePath;
+					const result = await answerQuestion(question, vaultPath, 20);
+					
+					new Notice(`Answer: ${result.answer.substring(0, 100)}...`);
+					console.log('Full answer:', result);
+				} catch (error) {
+					new Notice(`Error: ${error.message}`);
+					console.error(error);
+				}
+			}
+		});
+
+		// Command 5: Generate Vault Report
+		this.addCommand({
+			id: 'generate-report',
+			name: 'Generate Vault Report',
+			callback: async () => {
+				try {
+					new Notice('Generating vault report (this may take a minute)...');
+					const vaultPath = (this.app.vault.adapter as any).basePath;
+					const report = await generateVaultReport(vaultPath);
+					
+					new Notice(`Report generated! Total notes: ${report.totalNotes}`);
+					console.log('Full report:', report);
+				} catch (error) {
+					new Notice(`Error: ${error.message}`);
+					console.error(error);
+				}
+			}
+		});
+
+		// TODO: Add ribbon icon
+		// TODO: Register side panel view
+		// TODO: Load settings
+	}
+
+	onunload() {
+		console.log('Unloading AI Life Assistant plugin');
+	}
+
+	// Helper method to prompt user for input
+	private async promptForInput(placeholder: string): Promise<string | null> {
+		return new Promise((resolve) => {
+			const modal = new (require('obsidian').Modal)(this.app);
+			modal.titleEl.setText('Input Required');
+			
+			const inputEl = modal.contentEl.createEl('input', {
+				type: 'text',
+				placeholder: placeholder
+			});
+			inputEl.style.width = '100%';
+			inputEl.style.marginBottom = '10px';
+			
+			const buttonEl = modal.contentEl.createEl('button', { text: 'Submit' });
+			buttonEl.onclick = () => {
+				resolve(inputEl.value);
+				modal.close();
+			};
+			
+			modal.onClose = () => resolve(null);
+			modal.open();
+			inputEl.focus();
+		});
+	}
+}
