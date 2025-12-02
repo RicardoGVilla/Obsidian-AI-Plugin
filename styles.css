@@ -1,0 +1,58 @@
+/* Styles for AI Life Assistant plugin */
+
+.ai-assistant-view {
+    padding: 20px;
+}
+
+.ai-assistant-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--background-modifier-border);
+    margin-bottom: 20px;
+}
+
+.ai-assistant-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+}
+
+.ai-assistant-tab.active {
+    color: var(--text-normal);
+    border-bottom: 2px solid var(--interactive-accent);
+}
+
+.ai-assistant-button {
+    margin: 10px 0;
+    padding: 10px 20px;
+    width: 100%;
+    background: var(--interactive-accent);
+    color: var(--text-on-accent);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.ai-assistant-button:hover {
+    background: var(--interactive-accent-hover);
+}
+
+.ai-assistant-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 5px;
+    color: var(--text-normal);
+}
+
+.ai-assistant-result {
+    margin-top: 20px;
+    padding: 15px;
+    background: var(--background-secondary);
+    border-radius: 5px;
+    max-height: 500px;
+    overflow-y: auto;
+}

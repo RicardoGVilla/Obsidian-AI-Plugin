@@ -1,9 +1,43 @@
-import { Plugin, WorkspaceLeaf, Notice, TFile, TFolder } from 'obsidian';
+import { Plugin, WorkspaceLeaf, Notice, TFile, TFolder, ItemView } from 'obsidian';
 import { categorizeNote } from './src/categorize';
 import { summarizeFolder } from './src/summarize';
 import { analyzePattern } from './src/analyze';
 import { answerQuestion } from './src/qa';
 import { generateVaultReport } from './src/batch';
+
+const VIEW_TYPE_AI_ASSISTANT = 'ai-assistant-view';
+
+// Side panel view class
+class AIAssistantView extends ItemView {
+	constructor(leaf: WorkspaceLeaf) {
+		super(leaf);
+	}
+
+	getViewType() {
+		return VIEW_TYPE_AI_ASSISTANT;
+	}
+
+	getDisplayText() {
+		return 'AI Assistant';
+	}
+
+	getIcon() {
+		return 'brain-circuit';
+	}
+
+	async onOpen() {
+		const container = this.containerEl.children[1];
+		container.empty();
+		container.addClass('ai-assistant-view');
+		
+		container.createEl('h4', { text: 'AI Life Assistant' });
+		container.createEl('p', { text: 'Your AI-powered command center' });
+	}
+
+	async onClose() {
+		// Cleanup if needed
+	}
+}
 
 export default class AILifeAssistantPlugin extends Plugin {
 	async onload() {
@@ -78,7 +112,7 @@ export default class AILifeAssistantPlugin extends Plugin {
 					const vaultPath = (this.app.vault.adapter as any).basePath;
 					const analysis = await analyzePattern(vaultPath, keyword, true);
 					
-					new Notice(`Found ${analysis.totalMentions} mentions in ${analysis.filesWithKeyword} files`);
+					new Notice(`Found ${analysis.totalMentions} mentions in ${analysis.notesWithKeyword} files`);
 					console.log('Full analysis:', analysis);
 				} catch (error) {
 					new Notice(`Error: ${error.message}`);
@@ -128,9 +162,41 @@ export default class AILifeAssistantPlugin extends Plugin {
 			}
 		});
 
-		// TODO: Add ribbon icon
-		// TODO: Register side panel view
-		// TODO: Load settings
+		// Register the view
+		this.registerView(
+			VIEW_TYPE_AI_ASSISTANT,
+			(leaf) => new AIAssistantView(leaf)
+		);
+
+		// Add ribbon icon
+		this.addRibbonIcon('brain-circuit', 'AI Assistant', (evt: MouseEvent) => {
+			this.activateView();
+		});
+	}
+
+	async activateView() {
+		const { workspace } = this.app;
+
+		let leaf: WorkspaceLeaf | null = null;
+		const leaves = workspace.getLeavesOfType(VIEW_TYPE_AI_ASSISTANT);
+
+		if (leaves.length > 0) {
+			// A leaf with our view already exists, use that
+			leaf = leaves[0];
+		} else {
+			// Our view could not be found in the workspace, create a new leaf
+			// in the right sidebar for it
+			const rightLeaf = workspace.getRightLeaf(false);
+			if (rightLeaf) {
+				leaf = rightLeaf;
+				await leaf.setViewState({ type: VIEW_TYPE_AI_ASSISTANT, active: true });
+			}
+		}
+
+		// Reveal the leaf in case it is in a collapsed sidebar
+		if (leaf) {
+			workspace.revealLeaf(leaf);
+		}
 	}
 
 	onunload() {

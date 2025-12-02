@@ -210,22 +210,7 @@ async function handleAnalyze() {
 async function handleQA() {
   console.log('\n💬 Ask a question about your vault\n');
   
-  const defaultPath = DEFAULT_VAULT;
-  console.log(`Default vault path: ${defaultPath}`);
-  
-  let vaultPath = await question('Enter vault path (or press Enter for default): ');
-  vaultPath = vaultPath.trim() || defaultPath;
-
-  // Validate vault path
-  if (!fs.existsSync(vaultPath)) {
-    console.log('❌ Vault path not found. Please try again.');
-    return await handleQA();
-  }
-
-  if (!fs.statSync(vaultPath).isDirectory()) {
-    console.log('❌ Must be a directory. Please try again.');
-    return await handleQA();
-  }
+  const vaultPath = DEFAULT_VAULT;
 
   const question_text = await question('Enter your question: ');
   
@@ -253,24 +238,9 @@ async function handleQA() {
 async function handleBatch() {
   console.log('\n📊 Generate vault report\n');
   
-  const defaultPath = DEFAULT_VAULT;
-  console.log(`Default vault path: ${defaultPath}`);
-  
-  let vaultPath = await question('Enter vault path (or press Enter for default): ');
-  vaultPath = vaultPath.trim() || defaultPath;
+  const vaultPath = DEFAULT_VAULT;
 
-  // Validate vault path
-  if (!fs.existsSync(vaultPath)) {
-    console.log('❌ Vault path not found. Please try again.');
-    return await handleBatch();
-  }
-
-  if (!fs.statSync(vaultPath).isDirectory()) {
-    console.log('❌ Must be a directory. Please try again.');
-    return await handleBatch();
-  }
-
-  console.log('\n⏳ Analyzing vault (this may take a moment)...\n');
+  console.log('⏳ Analyzing vault (this may take a moment)...\n');
 
   const report = await generateVaultReport(vaultPath);
 

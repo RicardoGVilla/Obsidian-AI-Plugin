@@ -1,0 +1,10 @@
+{
+	"id": "ai-life-assistant",
+	"name": "AI Life Assistant",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Your AI-powered command center for life. Systematically plan, track progress, and gain actionable insights to achieve your goals in any domain.",
+	"author": "Ricardo Gutierrez",
+	"authorUrl": "https://github.com/RicardoGVilla",
+	"isDesktopOnly": false
+}

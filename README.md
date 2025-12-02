@@ -1,6 +1,6 @@
-# 🧠 AI Life Assistant - Obsidian Plugin
+# 🧠 Obsidian AI Plugin
 
-> Transform your Obsidian vault into an intelligent AI assistant that deeply understands every aspect of your life
+> AI-powered automation that transforms your Obsidian vault into an intelligent knowledge assistant
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-43853D?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
@@ -9,166 +9,35 @@
 
 ---
 
-## The Vision: Your Personal AI That Actually Knows You
+## The Problem
 
-**This isn't just a note organizer—it's an AI that has comprehensive access to your life.**
+Managing a large Obsidian vault becomes overwhelming:
+- **500+ notes** across 8 years with no clear categorization
+- Hard to remember what's buried in folders
+- Can't find themes or patterns across notes
+- Basic keyword search doesn't understand context
 
-Imagine having an AI assistant that knows:
-- 💰 **Your finances:** Income, expenses, financial goals, investment strategies
-- 🎯 **Your vision:** Long-term objectives, 5-year plans, life philosophy
-- 💪 **Your fitness:** Workout history, nutrition goals, what you should eat today
-- 🎬 **Your preferences:** Movies you've watched, what you liked, personalized recommendations
-- 💕 **Your relationships:** Dating history, patterns, past issues, meaningful advice
-- 📚 **Your learning:** What you've studied, gaps in knowledge, connections between concepts
-- 🏢 **Your career:** Job search struggles, interview preparation, professional growth
-- 🧘 **Your habits:** Systems you've built, tracking progress, areas for improvement
-- 🌍 **Your experiences:** Travel, social life, personal growth journey
-
-### Real-World Examples:
-
-**💰 Financial Planning (Sunday Review):**
-```
-You: "How am I doing financially?"
-
-AI: "Based on your FINANCES folder:
-- Monthly income: $X from PrimeFreight
-- Expenses trending 15% above budget (mostly eating out in Montreal)
-- Your VISION folder shows goal to save $50K by 2026
-- Current trajectory: Need to cut $400/month to hit goal
-- Suggestion: Your JOURNAL shows isolation → eating out alone
-  Consider meal prep (aligns with fitness goals too)"
-```
-
-**🍽️ What to Eat:**
-```
-You: "What should I eat today?"
-
-AI: "From your HEALTH & FITNESS notes:
-- Goal: Build muscle, lose fat
-- Current: 2100 calories/day target, 180g protein
-- Recent JOURNAL: You've been stressed, skipping meals
-- Recommendation: High-protein, easy meals
-  → Chicken breast + rice + veggies (meal prep from Sunday)
-  → Greek yogurt + berries (you liked this per Nov 15 entry)"
-```
-
-**💕 Dating Advice:**
-```
-You: "Should I text Grace again?"
-
-AI: "From your PERSONAL LIFE → Dating folder:
-- Grace incident (Oct 2025): Ghosted after 3 dates
-- Pattern detected: You over-invest early (seen with Sarah, Lisa, Grace)
-- JOURNAL shows this triggered social withdrawal
-- Your VISION notes say 'prioritize self-worth'
-- Advice: No. Focus on gym/career goals first.
-  Revisit dating when confidence rebuilds (per your own plan)"
-```
-
-**🎯 Life Improvement Areas:**
-```
-You: "What areas of my life need work?"
-
-AI: "Analyzing your entire vault (285 notes):
-1. Social Isolation (CRITICAL)
-   - 47 mentions in JOURNAL, increasing since Montreal move
-   - Impact: Dating confidence down, career motivation down
-   - Action: Join sports league (you mentioned this Nov 12)
-
-2. Career Stagnation
-   - Stuck at PrimeFreight, job applications slow
-   - Vision: Tech job by Q1 2026 (90 days away!)
-   - Action: Finish Obsidian plugin (demo-ready for interviews)
-
-3. Financial Habits
-   - Eating out = $600/month (loneliness spending)
-   - Gym membership unused (waste of $80/month)
-   - Action: Meal prep + home workouts = save $400/month"
-```
-
-**🎬 Movie Recommendation:**
-```
-You: "What movie should I watch tonight?"
-
-AI: "From your ENTERTAINMENT folder:
-- Liked: Dark Knight, Inception, Interstellar (pattern: Nolan films)
-- Disliked: Rom-coms, slow dramas
-- Mood: Your JOURNAL today shows stress from work
-- Recommendation: Dune Part 2 (epic, cerebral, escapist)
-  or Arcane S2 (you binge-watched S1, still unfinished)"
-```
+**What if your notes could organize themselves?**
 
 ---
 
-## Current Implementation: Phase 1 Foundation
+## The Solution
 
-This project is the **first step** toward that vision. Right now, it gives the AI access to:
+This plugin brings **AI-powered automation** to Obsidian using Google's Gemini API:
 
-✅ **Your entire Obsidian vault** (journal entries, goals, notes, projects)  
-✅ **Context-aware Q&A** (ask questions, get answers based on your life data)  
-✅ **Pattern detection** (identify trends across time, folders, topics)  
-✅ **Auto-organization** (categorize notes, summarize folders, batch reports)  
-✅ **Smart insights** (AI analyzes your life holistically, not just individual notes)
-
-### What It Does Today (6 Features Live):
-
-| Feature | What It Enables |
-|---------|----------------|
-| **File Categorization** | Auto-organize scattered notes (Career, Health, Finance, etc.) |
-| **Folder Summarization** | Understand what's in each life area (JOURNAL, FINANCES, VISION) |
-| **Pattern Analysis** | Detect trends ("stress" mentions increasing? Financial anxiety?) |
-| **Q&A System** | Ask questions about your life ("What were my goals in November?") |
-| **Batch Processing** | Vault-wide reports (holistic view of all life areas) |
-| **CLI Interface** | Professional terminal access to all features |
-
-### Phase 2 Vision (Future):
-
-🔮 **Cross-domain insights:**
-- "Your dating struggles correlate with career stress (JOURNAL analysis)"
-- "Finance anxiety peaked when job search stalled (Oct-Nov 2025)"
-
-🔮 **Proactive suggestions:**
-- "You haven't journaled in 5 days (usually write when stressed—check in?)"
-- "Gym goal mentioned 12 times but no workout logs—restart?"
-
-🔮 **Life dashboard:**
-- Health score, career momentum, financial trajectory, social wellness
-- Weekly reports: "This week: Career +15%, Health -10%, Relationships stable"
-
-🔮 **External data integration** (ideal future):
-- Browser history (learning patterns, time wasted)
-- Messaging apps (conversation analysis, relationship health)
-- Calendar (time allocation, priorities vs. reality)
-- Bank transactions (spending patterns, financial health)
+✅ **Auto-categorize** any note (Career, Health, Journal, Projects, etc.)  
+✅ **Summarize folders** (get 200-word AI summary of any folder's themes)  
+✅ **Detect patterns** (search keywords, find trends, get AI insights)  
+✅ **Ask questions** about your vault (Q&A system with context)  
+✅ **Batch process** your entire vault (vault-wide reports and statistics)  
+✅ **Visual UI** inside Obsidian (side panel with buttons, no terminal needed)  
+✅ **CLI interface** for power users (run commands from terminal)
 
 ---
 
-## Demo: What It Can Do Today
+## Demo
 
-### CLI Interface - Ask About Your Life
-```bash
-# Financial check-in
-$ npm run qa
-Question: How am I doing financially?
-Answer: Based on your FINANCES folder, you're earning steady 
-income from PrimeFreight but expenses are trending 15% above 
-your budget. Your VISION notes mention a goal to save $50K 
-by 2026...
-
-# Get life improvement suggestions
-$ npm run batch
-✓ Analyzing 285 notes across 15 folders...
-📊 TOP THEMES:
-  1. Career advancement and job search struggles
-  2. Social isolation since Montreal move
-  3. Financial discipline and long-term planning
-💡 SUGGESTIONS:
-  1. Your JOURNAL folder has 105 notes but no structure
-  2. Dating notes scattered across PERSONAL LIFE - consolidate?
-  3. Fitness goals mentioned 23 times but no workout logs
-```
-
-### Real Use Cases From My Life:
+### CLI Interface (Features 1-3)
 ```bash
 # Categorize a note
 $ npm run cli categorize "./Personal Vault/random-note.md"
