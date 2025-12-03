@@ -540,3 +540,9 @@ Each feature needs a story following STAR format (Situation, Task, Action, Resul
 **Next Milestone:** Obsidian Plugin UI (Dec 9-15)  
 **Recent Commits:** `d2f35b2` (Q&A), `e31b4ad` (Batch), plus CLI updates  
 **Project Completion:** Dec 15, 2025 (on track)
+
+---
+
+## 📚 Related Files
+
+- **INTERVIEW-PREP.md** - 150+ ownership test questions to verify you understand this project
