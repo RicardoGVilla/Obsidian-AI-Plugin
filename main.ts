@@ -100,7 +100,8 @@ class AIAssistantView extends ItemView {
 			try {
 				new Notice('Categorizing note...');
 				const content = await this.app.vault.read(file);
-				const category = await categorizeNote(content);
+				const vaultPath = (this.app.vault.adapter as any).basePath;
+				const category = await categorizeNote(content, vaultPath);
 				new Notice(`Category: ${category}`);
 			} catch (error) {
 				new Notice(`Error: ${error.message}`);
@@ -272,7 +273,8 @@ export default class AILifeAssistantPlugin extends Plugin {
 				try {
 					new Notice('Categorizing note...');
 					const content = await this.app.vault.read(file);
-					const category = await categorizeNote(content);
+					const vaultPath = (this.app.vault.adapter as any).basePath;
+					const category = await categorizeNote(content, vaultPath);
 					new Notice(`Category: ${category}`);
 				} catch (error) {
 					new Notice(`Error: ${error.message}`);

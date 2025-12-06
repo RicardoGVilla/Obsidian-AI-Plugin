@@ -89,7 +89,7 @@ async function main() {
   }
 }
 
-async function handleCategorize() {
+async function handleCategorize(): Promise<void> {
   console.log('\n📄 Categorize a note\n');
   
   const defaultPath = `${DEFAULT_VAULT}/JOURNAL/Reflections/2025/2025-01-01.md`;
@@ -112,13 +112,13 @@ async function handleCategorize() {
   console.log('\n⏳ Categorizing note...\n');
 
   const noteContent = fs.readFileSync(notePath, 'utf-8');
-  const category = await categorizeNote(noteContent);
+  const category = await categorizeNote(noteContent, DEFAULT_VAULT);
 
   console.log(`\n📄 Note: ${path.basename(notePath)}`);
   console.log(`📁 Category: ${category}\n`);
 }
 
-async function handleSummarize() {
+async function handleSummarize(): Promise<void> {
   console.log('\n📁 Summarize a folder\n');
   
   const defaultPath = `${DEFAULT_VAULT}/JOURNAL/Reflections/2025`;
@@ -147,7 +147,7 @@ async function handleSummarize() {
   console.log(`\n✨ Summary:\n${result.summary}\n`);
 }
 
-async function handleAnalyze() {
+async function handleAnalyze(): Promise<void> {
   console.log('\n🔍 Analyze keyword patterns\n');
   
   const defaultPath = `${DEFAULT_VAULT}/JOURNAL/Reflections/2025`;
@@ -207,7 +207,7 @@ async function handleAnalyze() {
   }
 }
 
-async function handleQA() {
+async function handleQA(): Promise<void> {
   console.log('\n💬 Ask a question about your vault\n');
   
   const vaultPath = DEFAULT_VAULT;
